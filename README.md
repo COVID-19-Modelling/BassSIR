@@ -13,7 +13,19 @@ Load the package before use it
 library(BassSIR)
 ```
 
-## Usage
+## Contents
+
+- [Modelling](#modelling)
+  - [Data prepartion](#data-preparation)
+  - [Model fitting](#model-fitting)
+  - [Simulation](#simulation)
+  - [Model comparison](#model-comparison)
+  - [Goodness of fit](#goodness-of-fit)
+  
+- [Output and visualisation](#output-and-visualisation)
+
+- [Academic contact](#academic-contact)
+
 
 
 ## Modelling
