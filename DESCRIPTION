@@ -1,0 +1,23 @@
+Package: BassSIR
+Type: Package
+Title: Infectious disease modelling with Bass-SIR model
+Version: 0.1.0
+Authors@R: 
+    person(given = "Chu-Chang",
+           family = "Ku",
+           role = c("aut", "cre"),
+           email = "TimeWz667@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-4719-117X"))
+Maintainer: TimeWz667 <TimeWz667@gmail.com>
+Description: Modelling outbreaks of infectious disease with Bass-SIR models
+    The strengths of this modelling framework are: fast, valided, fitness for non-homogeneious networks.  
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Import:
+  data.table,
+  R2jags,
+  ggplot2,
+  gridExtra,
+  odin
+RoxygenNote: 7.0.2
