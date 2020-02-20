@@ -2,10 +2,13 @@
 % Please edit documentation in R/data.R
 \name{as_bass_data}
 \alias{as_bass_data}
+\alias{print.BassData}
 \title{Prepare data for BassSIR modelling}
 \usage{
 as_bass_data(d, id = "Place X", i_date = "Date",
   i_confirmed = "Confirmed", i_recovered = "Cured", i_dead = "Dead")
+
+\method{print}{BassData}(cases)
 }
 \arguments{
 \item{d}{source data.frame}
