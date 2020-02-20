@@ -32,7 +32,7 @@
 #' @examples
 #' as_bass_data(n_covid19$Hubei)
 #'
-as_bass_data <- function(d, location = "Place X", i_date = "Date",
+as_bass_data <- function(d, id = "Place X", i_date = "Date",
                          i_confirmed = "Confirmed", i_recovered = "Cured", i_dead = "Dead") {
 
   if (!is.data.frame(d)) {
@@ -41,7 +41,8 @@ as_bass_data <- function(d, location = "Place X", i_date = "Date",
   d <- d[order(d[i_date]), ]
 
   cases <- list(
-    Date = d[i_date],
+    ID = id,
+    Date = as.vector(d[i_date]),
     len = nrow(d),
     I = ts(d[i_confirmed]),
     R = ts(d[i_recovered]),
@@ -56,5 +57,6 @@ as_bass_data <- function(d, location = "Place X", i_date = "Date",
 #' @rdname fetch_demography
 #' @export
 print.BassData <- function(cases) {
-
+  cat("Time-series of ", cases$ID, "\n")
+  cat("From: ", cases$Date[1], ", to: ", cases$Date[cases$len])
 }

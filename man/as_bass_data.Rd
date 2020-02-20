@@ -4,13 +4,11 @@
 \alias{as_bass_data}
 \title{Prepare data for BassSIR modelling}
 \usage{
-as_bass_data(d, location = "Place X", i_date = "Date",
+as_bass_data(d, id = "Place X", i_date = "Date",
   i_confirmed = "Confirmed", i_recovered = "Cured", i_dead = "Dead")
 }
 \arguments{
 \item{d}{source data.frame}
-
-\item{location}{identity of the data}
 
 \item{i_date}{index indicating date}
 
@@ -19,6 +17,8 @@ as_bass_data(d, location = "Place X", i_date = "Date",
 \item{i_recovered}{index indicating recovered people}
 
 \item{i_dead}{index indicating the number of dead people}
+
+\item{location}{identity of the data}
 }
 \description{
 Prepare data for BassSIR modelling
