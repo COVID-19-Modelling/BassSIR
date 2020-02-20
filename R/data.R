@@ -42,7 +42,7 @@ as_bass_data <- function(d, id = "Place X", i_date = "Date",
 
   cases <- list(
     ID = id,
-    Date = as.vector(d[i_date]),
+    Date = d[i_date][, 1],
     len = nrow(d),
     I = ts(d[i_confirmed]),
     R = ts(d[i_recovered]),
@@ -54,9 +54,10 @@ as_bass_data <- function(d, id = "Place X", i_date = "Date",
 }
 
 
-#' @rdname fetch_demography
+#' @rdname as_bass_data
 #' @export
 print.BassData <- function(cases) {
   cat("Time-series of ", cases$ID, "\n")
-  cat("From: ", cases$Date[1], ", to: ", cases$Date[cases$len])
+  cat("From: ", as.character(cases$Date[1]),
+      ", to: ", as.character(cases$Date[cases$len]))
 }
