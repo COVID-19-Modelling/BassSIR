@@ -20,4 +20,4 @@ Import:
   ggplot2,
   gridExtra,
   odin
-RoxygenNote: 7.0.2
+RoxygenNote: 6.1.1
