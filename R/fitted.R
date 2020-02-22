@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-fitted.EstBassSIR <- function(est, method = c("match", "forward")) {
+fitted.estBassSIR <- function(est, method = c("match", "forward")) {
   mus <- t(est$mus)
 
   method <- match.arg(method)
@@ -26,7 +26,7 @@ fitted.EstBassSIR <- function(est, method = c("match", "forward")) {
     method = method
   )
 
-  class(y) <- fittedBassSIR
+  class(y) <- "fittedBassSIR"
   return(y)
 }
 
