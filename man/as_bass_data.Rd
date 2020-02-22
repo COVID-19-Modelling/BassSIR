@@ -5,13 +5,16 @@
 \alias{print.BassData}
 \title{Prepare data for BassSIR modelling}
 \usage{
-as_bass_data(d, id = "Place X", i_date = "Date",
-  i_confirmed = "Confirmed", i_recovered = "Cured", i_dead = "Dead")
+as_bass_data(d, id = "Place X", status = c("Current", "Cumulative"),
+  i_date = "Date", i_confirmed = "Confirmed", i_recovered = "Cured",
+  i_dead = "Dead")
 
 \method{print}{BassData}(cases)
 }
 \arguments{
 \item{d}{source data.frame}
+
+\item{status}{the source data are "Cumulative" numbers or "Current"}
 
 \item{i_date}{index indicating date}
 
