@@ -36,9 +36,9 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...
   }
 
   model.file <- switch(type,
-                       BassSIR = system.file("models/BassSIR.R", package = "BassSIR"),
-                       SIR = system.file("models/SIR.R", package = "BassSIR"),
-                       Growth = system.file("models/Growth.R", package = "BassSIR")
+                       BassSIR = system.file("fit/BassSIR.R", package = "BassSIR"),
+                       SIR = system.file("fit/SIR.R", package = "BassSIR"),
+                       Growth = system.file("fit/Growth.R", package = "BassSIR")
                       )
 
   inits <- switch(type,
