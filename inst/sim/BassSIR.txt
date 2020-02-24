@@ -1,8 +1,10 @@
-deriv(S) <- - foi * S
 deriv(I) <- foi * S - dropout * I
+deriv(A) <- dropout * I
 
-initial(S) <- m - I0 - A0
 initial(I) <- I0
+initial(A) <- A0
+
+S <- m - I - A
 
 output(Inc) <- foi * S
 output(FOI) <- foi
