@@ -2,7 +2,9 @@
 
 S3method(fitted,estBassSIR)
 S3method(print,BassData)
+S3method(print,simBassSIR)
 S3method(print,summaryEstBassSIR)
+S3method(simulate,estBassSIR)
 S3method(summary,estBassSIR)
 S3method(summary,fittedBassSIR)
 export(as_bass_data)
