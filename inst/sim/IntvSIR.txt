@@ -1,0 +1,53 @@
+# ODEs
+deriv(I) <- foi * S - dropout_t * I
+deriv(A) <- dropout_t * I
+
+
+# Initial values
+initial(I) <- I0
+initial(A) <- A0
+
+
+S <- m - I - A
+
+I0 <- user(5)
+A0 <- user(5)
+
+
+# Output variable
+output(Inc) <- foi * S
+output(FOI) <- foi
+output(PrEx) <- 0
+output(Re) <- beta_t / dropout * S / m_t
+output(R0) <- beta_t / dropout
+
+
+foi <- beta_t * I / m_t
+
+
+# Time varying parameters
+m_t <- interpolate(tt, m, "constant")
+beta_t <- interpolate(tt, beta, "linear")
+dropout_t <- interpolate(tt, dropout, "linear")
+
+
+# Parameter loading
+n_tt <- length(tt)
+
+tt[] <- user()
+dim(tt) <- user()
+
+m[] <- user()
+dim(m) <- n_tt
+
+beta[] <- user()
+dim(beta) <- n_tt
+
+dropout[] <- r_rec[i] + r_die[i]
+dim(dropout) <- n_tt
+
+r_rec[] <- user()
+dim(r_rec) <- n_tt
+
+r_die[] <- user()
+dim(r_die) <- n_tt
