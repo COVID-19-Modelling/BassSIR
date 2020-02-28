@@ -22,4 +22,4 @@ A0 <- user(5)
 
 kappa <- user(0.01)
 beta <- user(0.3)
-dropout <- user(0)
+dropout <- user(0.1)

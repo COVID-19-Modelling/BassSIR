@@ -8,7 +8,7 @@ initial(I) <- I0
 initial(A) <- A0
 
 
-S <- m - I - A
+S <- m_t - I - A
 
 I0 <- user(5)
 A0 <- user(5)
@@ -18,8 +18,8 @@ A0 <- user(5)
 output(Inc) <- foi * S
 output(FOI) <- foi
 output(PrEx) <- foi_ex / foi * 100
-output(Re) <- beta_t / dropout * S / m_t
-output(R0) <- beta_t / dropout
+output(Re) <- beta_t / dropout_t * S / m_t
+output(R0) <- beta_t / dropout_t
 
 
 foi <- foi_en + foi_ex
@@ -46,14 +46,14 @@ dim(m) <- n_tt
 beta[] <- user()
 dim(beta) <- n_tt
 
-dropout[] <- r_rec[i] + r_die[i]
+dropout[] <- r_rec[i] + r_death[i]
 dim(dropout) <- n_tt
 
 r_rec[] <- user()
 dim(r_rec) <- n_tt
 
-r_die[] <- user()
-dim(r_die) <- n_tt
+r_death[] <- user()
+dim(r_death) <- n_tt
 
 kappa[] <- user()
 dim(kappa) <- n_tt
