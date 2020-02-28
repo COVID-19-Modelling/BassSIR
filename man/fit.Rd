@@ -7,7 +7,17 @@
 fit(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 10000, ...)
 }
 \arguments{
-\item{...}{}
+\item{d}{a BassSIR data}
+
+\item{r_rec}{recovery rate}
+
+\item{r_death}{death rate}
+
+\item{type}{type of model}
+
+\item{n_iter}{number of interation to keep}
+
+\item{...}{arguments for jags(...)}
 }
 \description{
 Fit a BassSIR family model to epidemic data

@@ -3,7 +3,7 @@
 \name{summary.estBassSIR}
 \alias{summary.estBassSIR}
 \alias{print.summaryEstBassSIR}
-\title{Title}
+\title{Summarise a fitted Bass SIR model}
 \usage{
 \method{summary}{estBassSIR}(est)
 
@@ -13,5 +13,5 @@
 \item{est}{}
 }
 \description{
-Title
+Summarise a fitted Bass SIR model
 }

@@ -1,11 +1,11 @@
 #' Fit a BassSIR family model to epidemic data
 #'
-#' @param d
-#' @param r_rec
-#' @param r_death
-#' @param type
-#' @param n_iter
-#' @param ...
+#' @param d a BassSIR data
+#' @param r_rec recovery rate
+#' @param r_death death rate
+#' @param type type of model
+#' @param n_iter number of interation to keep
+#' @param ... arguments for jags(...)
 #'
 #' @return
 #' @export
@@ -36,9 +36,9 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...
   }
 
   model.file <- switch(type,
-                       BassSIR = system.file("fit/BassSIR.R", package = "BassSIR"),
-                       SIR = system.file("fit/SIR.R", package = "BassSIR"),
-                       Growth = system.file("fit/Growth.R", package = "BassSIR")
+                       BassSIR = system.file("fit/BassSIR.txt", package = "BassSIR"),
+                       SIR = system.file("fit/SIR.txt", package = "BassSIR"),
+                       Growth = system.file("fit/Growth.txt", package = "BassSIR")
                       )
 
   inits <- switch(type,
@@ -72,7 +72,7 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...
 
 
 
-#' Title
+#' Summarise a fitted Bass SIR model
 #'
 #' @param est
 #'

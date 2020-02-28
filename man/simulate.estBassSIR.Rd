@@ -15,7 +15,7 @@
 
 \item{nsim}{number of simulation}
 
-\item{nforward}{time steps forward}
+\item{nforward}{time-steps forward}
 
 \item{seed}{random seed}
 }

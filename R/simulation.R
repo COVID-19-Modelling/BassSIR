@@ -2,7 +2,7 @@
 #'
 #' @param est a fitted model
 #' @param nsim number of simulation
-#' @param nforward time steps forward
+#' @param nforward time-steps forward
 #' @param seed random seed
 #'
 #' @return
@@ -25,7 +25,7 @@ simulate.estBassSIR <- function(est, nsim = nrow(object$Parameters),
 
   f <- switch(est$ModelType,
               BassSIR = system.file("sim/BassSIR.txt", package = "BassSIR"),
-              SIR = system.file("sim/SIR.txt", package = "SIR"))
+              SIR = system.file("sim/SIR.txt", package = "BassSIR"))
 
   hat <- fitted(est)
   hat <- hat$I_hat[nrow(hat$I_hat), ]
@@ -78,12 +78,15 @@ simulate.estBassSIR <- function(est, nsim = nrow(object$Parameters),
   dates <- est$Cases$Date[est$Cases$len] + 0:nforward
 
   sim <- list(
+    ModelType = est$ModelType,
     Cases = est$Cases,
-    Y0s = y0s,
-    Date = dates,
-    Simulations = sims,
     Selected = selected,
-    Parameters = est$Parameters[selected,]
+    Parameters = est$Parameters[selected,],
+    Offsets = est$Offsets,
+    Y0s = data.frame(y0s),
+    Date = dates,
+    Simulations = sims
+
   )
 
   class(sim) <- "simBassSIR"
@@ -94,5 +97,7 @@ simulate.estBassSIR <- function(est, nsim = nrow(object$Parameters),
 #' @rdname simulate.estBassSIR
 #' @export
 print.simBassSIR <- function(obj) {
-  print(obj)
+  cat("Model type:\t", obj$ModelType, "\n")
+  rg <- format.Date(range(obj$Date))
+  cat("Time ragne:\t", rg[1], " - ", rg[2], "\n")
 }
