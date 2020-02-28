@@ -11,7 +11,7 @@ Authors@R:
 Maintainer: TimeWz667 <TimeWz667@gmail.com>
 Description: Modelling outbreaks of infectious disease with Bass-SIR models
     The strengths of this modelling framework are: fast, valided, fitness for non-homogeneious networks.  
-License: What license is it under?
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Import:
