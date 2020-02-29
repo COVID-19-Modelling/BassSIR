@@ -108,3 +108,41 @@ print.summaryEstBassSIR <- function(est) {
     cat(name, ": \t", est$Pars[[name]], "\n")
   }
 }
+
+
+#' Compare empirical models
+#'
+#' @param ... models with argument names indicating the names of models
+#'
+#' @return
+#' @export
+#'
+#' @examples
+compare_models <- function(...) {
+  m.list <- list(...)
+
+  mods <- names(m.list)
+  if (length(mods) < length(m.list)) {
+    mods <- paste0("Model_", 1:length(m.list))
+  } else {
+    mods <- ifelse(mods == "", paste0("Model_", 1:length(m.list)), mods)
+  }
+
+
+  devs <- sapply(m.list, function(x) {
+    lse(x$Parameters$deviance / -2) - log(nrow(x$Parameters))
+  })
+
+  dics <- sapply(m.list, function(x) x$DIC)
+
+  bfs <- exp(devs - devs[1])
+
+  return(data.frame(
+    Location = m.list[[1]]$Cases$ID,
+    Models = mods,
+    DIC = dics,
+    BayesFactor = bfs
+  ))
+}
+
+

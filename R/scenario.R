@@ -91,9 +91,6 @@ run_scenario <- function(sim, fn) {
 compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
   scs <- list(...)
 
-
-  scs <- list(lockdown = lockdown)
-
   vs <- intersect(dimnames(sim$Simulations)[[2]], dimnames(scs[[1]]$Simulations)[[2]])
   vs <- vs[vs != "t"]
 
@@ -131,7 +128,7 @@ compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
       sims <- switch (fn_change,
         Y0 = sims / baseline - 1,
         Y1 = 1 - baseline / sims,
-        Yt = log(sims) - log(sims)
+        Yt = log(sims / baseline)
       ) * 100
       temp <- rbind(temp,
                     data.frame(Time = sim$Date, Scenario = sc,
