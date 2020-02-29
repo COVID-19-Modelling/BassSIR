@@ -86,7 +86,6 @@ simulate.estBassSIR <- function(est, nsim = nrow(object$Parameters),
     Y0s = data.frame(y0s),
     Date = dates,
     Simulations = sims
-
   )
 
   class(sim) <- "simBassSIR"

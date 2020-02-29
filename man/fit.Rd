@@ -2,9 +2,10 @@
 % Please edit documentation in R/fitting.R
 \name{fit}
 \alias{fit}
-\title{Fit a BassSIR family model to epidemic data}
+\title{Fit a model of the BassSIR family to epidemic data}
 \usage{
-fit(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 10000, ...)
+fit(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper,
+  n_iter = 10000, ...)
 }
 \arguments{
 \item{d}{a BassSIR data}
@@ -20,5 +21,5 @@ fit(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 10000, ...)
 \item{...}{arguments for jags(...)}
 }
 \description{
-Fit a BassSIR family model to epidemic data
+Fit a model of the BassSIR family to epidemic data
 }

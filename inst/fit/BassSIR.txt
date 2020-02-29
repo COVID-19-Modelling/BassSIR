@@ -10,7 +10,7 @@ model {
   alpha2 = (- beta / m)
   tau ~ dgamma(1E-3, 1E-3)
 
-  m ~ dunif(mx, mx * 10)
-  kappa ~ dunif(0, 1)
-  beta ~ dunif(0, 1)
+  m ~ dunif(mx, mx * m_mul)
+  kappa ~ dbeta(kappa_a, kappa_b)
+  beta ~ dbeta(beta_a, beta_b)
 }

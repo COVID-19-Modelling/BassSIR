@@ -1,4 +1,4 @@
-#' Fit a BassSIR family model to epidemic data
+#' Fit a model of the BassSIR family to epidemic data
 #'
 #' @param d a BassSIR data
 #' @param r_rec recovery rate
@@ -11,8 +11,26 @@
 #' @export
 #'
 #' @examples
-fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...) {
+fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper, n_iter = 1E4, ...) {
   type <- match.arg(type)
+
+  if (missing(hyper)) hyper <- list()
+
+  # Validate hyperparameters
+  hyper$m_mul <- max(hyper$m_mul, 1)
+  if (hyper$m_mul <= 1) {
+    hyper$m_mul <- 10
+  }
+
+  if (type %in% c("BassSIR", "SIR")) {
+    hyper$beta_a <- max(hyper$beta_a, 1)
+    hyper$beta_b <- max(hyper$beta_b, 1)
+  }
+  if (type %in% c("BassSIR", "Growth")) {
+    hyper$kappa_a <- max(hyper$kappa_a, 1)
+    hyper$kappa_b <- max(hyper$kappa_b, 1)
+  }
+
 
   dat <- (function(nc) {
     ni <- nc$I
@@ -31,6 +49,8 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...
     )
   })(d)
 
+  dat <- c(hyper, dat)
+
   if (type == "Growth") {
     dat$x2 <- NULL
   }
@@ -47,19 +67,33 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR"), n_iter = 1E4, ...
                   Growth = function(){ list(tau = 0.01, kappa = 0.01, m = dat$mx) }
                   )
 
+  pars_save <- c("mu", "m")
+  if (type %in% c("BassSIR", "SIR")) pars_save <- c(pars_save, "beta")
+  if (type %in% c("BassSIR", "Growth")) pars_save <- c(pars_save, "kappa")
+
   f <- R2jags::jags(data = dat,
                          inits = inits,
                          parameters.to.save = c("mu", "kappa", "beta", "m"),
                          n.iter = n_iter,
                          model.file = model.file, ...)
 
-  pars <- with(as.data.frame(f$BUGSoutput$sims.matrix), {
+  pars_dis <- with(as.data.frame(f$BUGSoutput$sims.matrix), {
+    if (type == "Growth") beta <- 0
+    if (type == "SIR") kappa <- 0
+    data.frame(kappa = kappa, beta = beta, m = m, deviance = deviance)
+  })
+
+  pars_con <- with(as.data.frame(f$BUGSoutput$sims.matrix), {
+    if (type == "Growth") beta <- 0
+    if (type == "SIR") kappa <- 0
     data.frame(kappa = qexp(kappa), beta = qexp(beta), m = m, deviance = deviance)
   })
 
   res <- list(
     ModelType = type,
-    Parameters = pars,
+    Hyperpars = hyper,
+    Parameters = pars_con,
+    ParametersDis = pars_dis,
     Cases = cases,
     mus = f$BUGSoutput$sims.matrix[, paste0("mu[", 1:dat$n_t, "]")],
     Offsets = c(r_rec = r_rec, r_death = r_death),
