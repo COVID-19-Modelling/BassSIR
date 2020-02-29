@@ -5,7 +5,7 @@ Infectious disease modelling with Bass SIR models
 ## Install package
 In R, you can install from github
 ```r
-devtools::install_github("TimeWz667/BassSIR", upgrade = FALSE)
+devtools::install_github("COVID-19-Modelling/BassSIR", upgrade = FALSE)
 ```
 
 Load the package before use it
