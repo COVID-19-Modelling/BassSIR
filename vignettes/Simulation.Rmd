@@ -1,0 +1,41 @@
+---
+title: "Fitted values, Simulation, and Epidemic indices"
+author: "Chu-Chang Ku"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Before simulation: loading package and model fitting
+```{r, results = "hide"}
+library(BassSIR)
+cases <- as_bass_data(n_covid19$Hubei, id = "Hubei")
+est <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "BassSIR")
+```
+
+
+### Fitted 
+```{r, echo = FALSE}
+f <- fitted(est)
+```
+
+
+### Simulation from the estimated model
+```{r, results = "hide"}
+sim <- simulate(est, nsim = 1000)
+```
+
+```{r}
+sim
+```
+
+
+
+
+### Epidemic indices
+```{r}
+summary(sim)
+```

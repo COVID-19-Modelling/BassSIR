@@ -1,0 +1,67 @@
+---
+title: "Model fitting"
+author: "Chu-Chang Ku"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Model fitting
+
+Under the structure of Bass-SIR model, we provide three models in the family for fitting 
+
+- **Bass-SIR** Bass-SIR model: $\frac{dI}{dt} = (\kappa + \beta I)\frac{m-I-A}{m} - \gamma I$
+- **SIR** ordinary SIR model, which fixed $\kappa$ to zero
+- **Growth** logistic growth model, which fixed $\beta$ to zero
+
+
+### Load the package as a starter
+```{r}
+library(BassSIR)
+```
+
+
+### Input data
+
+We use the data of COVID-19 in Hubei as an example 
+```{r, echo = FALSE}
+cases <- as_bass_data(n_covid19$Hubei, id = "Hubei")
+```
+
+
+### Fitting and summarising
+```{r, results="hide"}
+est1 <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "BassSIR")
+est2  <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "SIR")
+est3  <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "Growth")
+```
+
+
+```{r}
+summary(est1)
+```
+
+
+```{r}
+summary(est2)
+```
+
+
+```{r}
+summary(est3)
+```
+
+
+### Model comparison
+
+- DIC: Deviance Information Criteria, lower is better
+- Deviance: narrower is more stable, lower is better
+- Bayes factor: higher is better
+
+```{r}
+compare_models(BassSIR = est1, SIR = est2, Growth = est3)
+```
+

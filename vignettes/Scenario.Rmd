@@ -1,0 +1,60 @@
+---
+title: "Scenario Analysis"
+author: "Chu-Chang Ku"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Before scenario analysis: loading package, model fitting, simulate a baseline case
+```{r, results = "hide"}
+library(BassSIR)
+cases <- as_bass_data(n_covid19$Hubei, id = "Hubei")
+est <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "BassSIR")
+sim <- simulate(est, nsim = 1000)
+```
+
+
+### Setup scenario
+
+Example case: Absolute lockdown $\kappa = 0 $
+
+Scenario are set as function which modify the simulation parameters
+
+```{r, echo = FALSE}
+zero_kappa <- function(pars) {
+  pars$kappa <- rep(0, length(pars$kappa))
+  return(pars)
+}
+```
+
+
+### Simulation from the estimated model
+```{r, results = "hide"}
+lockdown <- run_scenario(sim, zero_kappa)
+```
+
+
+### Comparing different scenarios
+
+compare_scenarios will output two group of time-series
+
+- **Trajectories** The trends of simulations of each variable
+- **Change** Calculate the value changes from the baseline case 
+
+```{r}
+cp <- compare_scenarios(sim, Lockdown = lockdown, fn_change = "Yt")
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot(data = cp$Trajectories$I, aes(x = Time, y = mean, colour = Scenario)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Scenario), alpha = 0.2) +
+  geom_line()
+```
+
