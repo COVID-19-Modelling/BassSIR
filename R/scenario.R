@@ -91,6 +91,14 @@ run_scenario <- function(sim, fn) {
 compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
   scs <- list(...)
 
+  ns <- names(scs)
+
+  if (length(ns) < length(scs)) {
+    ns <- paste0("Scenario_", 1:length(scs))
+  } else {
+    ns <- ifelse(ns == "" | is.null(ns), paste0("Scenario_", 1:length(scs)), ns)
+  }
+
   vs <- intersect(dimnames(sim$Simulations)[[2]], dimnames(scs[[1]]$Simulations)[[2]])
   vs <- vs[vs != "t"]
 
@@ -98,17 +106,17 @@ compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
 
   for (v in vs) {
     sims <- sim$Simulations[, v, ]
-    temp <- data.frame(Time = sim$Date, Scenario = "Baseline",
+    temp <- data.table::data.table(Time = sim$Date, Scenario = "Baseline",
                        mean = apply(sims, 1, mean),
                        lower = apply(sims, 1, quantile, p = 0.025),
-                       upper = apply(sims, 1, quantile, p = 0.975), row.names = NULL)
+                       upper = apply(sims, 1, quantile, p = 0.975))
     for (sc in names(scs)) {
       sims <- scs[[sc]]$Simulations[, v, ]
       temp <- rbind(temp,
-                    data.frame(Time = sim$Date, Scenario = sc,
+                    data.table::data.table(Time = sim$Date, Scenario = sc,
                                mean = apply(sims, 1, mean),
                                lower = apply(sims, 1, quantile, p = 0.025),
-                               upper = apply(sims, 1, quantile, p = 0.975), row.names = NULL)
+                               upper = apply(sims, 1, quantile, p = 0.975))
       )
     }
     traj[[v]] <- temp
@@ -121,8 +129,8 @@ compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
   for (v in vs) {
     baseline <- sim$Simulations[, v, ]
 
-    temp <- data.frame(Time = sim$Date, Scenario = "Baseline",
-                       mean = 0, lower = 0, upper = 0, row.names = NULL)
+    temp <- data.table::data.table(Time = sim$Date, Scenario = "Baseline",
+                       mean = 0, lower = 0, upper = 0)
     for (sc in names(scs)) {
       sims <- scs[[sc]]$Simulations[, v, ]
       sims <- switch (fn_change,
@@ -131,10 +139,10 @@ compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
         Yt = log(sims / baseline)
       ) * 100
       temp <- rbind(temp,
-                    data.frame(Time = sim$Date, Scenario = sc,
+                    data.table::data.table(Time = sim$Date, Scenario = sc,
                                mean = apply(sims, 1, mean),
                                lower = apply(sims, 1, quantile, p = 0.025),
-                               upper = apply(sims, 1, quantile, p = 0.975), row.names = NULL)
+                               upper = apply(sims, 1, quantile, p = 0.975))
       )
     }
     change[[v]] <- temp
@@ -143,7 +151,7 @@ compare_scenarios <- function(sim, ..., fn_change = c("Y0", "Y1", "Yt")) {
   res <- list(
     Trajectories = traj,
     Changes = change,
-    Scenarios = names(scs)
+    Scenarios = ns
   )
   class(res) <- "compare_scenarios"
   return(res)

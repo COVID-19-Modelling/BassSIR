@@ -98,5 +98,63 @@ simulate.estBassSIR <- function(est, nsim = nrow(object$Parameters),
 print.simBassSIR <- function(obj) {
   cat("Model type:\t", obj$ModelType, "\n")
   rg <- format.Date(range(obj$Date))
-  cat("Time ragne:\t", rg[1], " - ", rg[2], "\n")
+  cat("Time range:\t", rg[1], " - ", rg[2], "\n")
 }
+
+
+#' Summarise epidemiological variables from simulation results
+#'
+#' @param sim a simulation result
+#' @param i an indicator specifying time points, 1 as the default
+#'
+#' @return
+#' @export
+#'
+#' @examples
+summary.simBassSIR <- function(sim, i = 1) {
+  loc <- sim$Cases$ID
+
+  indices <- list()
+  vs <- sim$Parameters
+  indices <- data.table::data.table(Location = loc,
+                                    variable = colnames(sim$Parameters),
+                                    mean = apply(vs, 2, mean),
+                                    lower = apply(vs, 2, quantile, p = 0.025),
+                                    upper = apply(vs, 2, quantile, p = 0.975)
+  )
+  tab <- sim$Simulations
+
+  epis <- matrix(0, nrow(vs), 5)
+  colnames(epis) <- c("R0", "R(t)", "PrEx", "PeakSize", "PeakTime")
+
+  epis[, 1] <- tab[i, "R0", ]
+  epis[, 2] <- tab[i, "Re", ]
+  epis[, 3] <- tab[i, "PrEx", ]
+  epis[, 4] <- apply(tab[, "I", ], 2, max)
+  epis[, 5] <- apply(tab[, "I", ], 2, which.max)
+
+
+  indices <- rbind(indices,
+                   data.table::data.table(Location = loc,
+                                          variable = colnames(epis),
+                                          mean = apply(epis, 2, mean),
+                                          lower = apply(epis, 2, quantile, p = 0.025),
+                                          upper = apply(epis, 2, quantile, p = 0.975)
+                   )
+  )
+  res <- list(
+    Location = loc,
+    Indices = indices
+  )
+  class(res) <- "summarySimBassSIR"
+  return(res)
+}
+
+
+#' @rdname summary.simBassSIR
+#' @export
+print.summarySimBassSIR <- function(obj) {
+  cat("Location: ", obj$Location, "\n")
+  print(obj$Indices[, -1])
+}
+

@@ -73,7 +73,7 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper, 
 
   f <- R2jags::jags(data = dat,
                          inits = inits,
-                         parameters.to.save = c("mu", "kappa", "beta", "m"),
+                         parameters.to.save = pars_save,
                          n.iter = n_iter,
                          model.file = model.file, ...)
 
@@ -100,7 +100,7 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper, 
     DIC = f$BUGSoutput$DIC
   )
 
-  class(res) <- paste0("est", type)
+  class(res) <- paste0("estBassSIR")
   return(res)
 }
 
@@ -108,7 +108,7 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper, 
 
 #' Summarise a fitted Bass SIR model
 #'
-#' @param est
+#' @param est a model with fitted parameters
 #'
 #' @return
 #' @export
@@ -159,9 +159,12 @@ compare_models <- function(...) {
   if (length(mods) < length(m.list)) {
     mods <- paste0("Model_", 1:length(m.list))
   } else {
-    mods <- ifelse(mods == "", paste0("Model_", 1:length(m.list)), mods)
+    mods <- ifelse(mods == "" | is.null(mods), paste0("Model_", 1:length(m.list)), mods)
   }
 
+  deviance = sapply(m.list, function(x) {
+    stats_fn(x$Parameters$deviance)
+  })
 
   devs <- sapply(m.list, function(x) {
     lse(x$Parameters$deviance / -2) - log(nrow(x$Parameters))
@@ -171,9 +174,10 @@ compare_models <- function(...) {
 
   bfs <- exp(devs - devs[1])
 
-  return(data.frame(
+  return(data.table::data.table(
     Location = m.list[[1]]$Cases$ID,
-    Models = mods,
+    Model = mods,
+    Deviance = deviance,
     DIC = dics,
     BayesFactor = bfs
   ))
