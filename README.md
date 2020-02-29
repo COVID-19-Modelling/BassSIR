@@ -20,7 +20,7 @@ library(BassSIR)
   - [Model fitting](#model-fitting)
   - [Simulation](#simulation)
   - [Model comparison](#model-comparison)
-  - [Goodness of fit](#goodness-of-fit)
+  - [Scenario analysis](#scenario-analysis)
   
 - [Output and visualisation](#output-and-visualisation)
 
@@ -31,26 +31,55 @@ library(BassSIR)
 ## Modelling
 ### Data preparation
 ```r
+cases <- as_bass_data(n_covid19$Hubei, id = "Hubei")
+est <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "BassSIR")
+sim <- simulate(est, nsim = 1000)
 ```
 
 ### Model fitting
+Fit BassSIR model to data
 ```r
+est_bass <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "BassSIR")
+summary(est_bass)
 ```
 
-### Simulation
+Fit SIR model to data
 ```r
+est_sir <- BassSIR::fit(cases, r_rec = 1/22.2, r_death = 1/22.3, type = "SIR")
+summary(est_sir)
 ```
 
 ### Model comparison
 ```r
+compare_models(BassSIR = est_bass, SIR = est_sir)
 ```
 
-### Goodness of fit
+### Simulation
 ```r
+sim <- simulate(est_bass, nsim = 1000)
+```
+
+### Scenario analysis
+```r
+zero_kappa <- function(pars) {
+  pars$kappa <- rep(0, length(pars$kappa))
+  return(pars)
+}
+lockdown <- run_scenario(sim, zero_kappa)
+```
+
+**compare_scenarios** will output two group of time-series
+
+- **Trajectories** The trends of simulations of each variable
+- **Change** Calculate the value changes from the baseline case 
+
+```{r}
+cp <- compare_scenarios(sim, Lockdown = lockdown, fn_change = "Yt")
 ```
 
 ## Output and visualisation
 ```r
+TBA
 ```
 
 
