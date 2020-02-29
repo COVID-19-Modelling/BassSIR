@@ -10,7 +10,7 @@
 \method{print}{summaryEstBassSIR}(est)
 }
 \arguments{
-\item{est}{}
+\item{est}{a model with fitted parameters}
 }
 \description{
 Summarise a fitted Bass SIR model
