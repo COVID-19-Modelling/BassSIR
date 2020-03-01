@@ -102,6 +102,32 @@ print.simBassSIR <- function(obj) {
 }
 
 
+#' @rdname simulate.estBassSIR
+#' @export
+aggregate_simulations <- function(sims) {
+
+  sim <- sims[[1]]
+
+  agg <- array(0, c(dim(sim$Simulations)[1], 3, dim(sim$Simulations)[3]))
+  for (i in 1:length(sims)) {
+    agg <- agg + sims[[i]]$Simulations[, 1:3, ]
+  }
+
+  agg_sim <- list(
+    Simulations = agg,
+    Date = sim$Date
+  )
+
+  res <- list(
+    Simulations = agg,
+    Date = sim$Date
+  )
+
+  class(res) <- "aggSimBassSIR"
+  return(res)
+}
+
+
 #' Summarise epidemiological variables from simulation results
 #'
 #' @param sim a simulation result
