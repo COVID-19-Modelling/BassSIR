@@ -94,7 +94,7 @@ fit <- function(d, r_rec, r_death, type = c("BassSIR", "SIR", "Growth"), hyper, 
     Hyperpars = hyper,
     Parameters = pars_con,
     ParametersDis = pars_dis,
-    Cases = cases,
+    Cases = d,
     mus = f$BUGSoutput$sims.matrix[, paste0("mu[", 1:dat$n_t, "]")],
     Offsets = c(r_rec = r_rec, r_death = r_death),
     DIC = f$BUGSoutput$DIC
