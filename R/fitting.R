@@ -120,11 +120,17 @@ summary.estBassSIR <- function(est) {
   y$Cases <- est$Cases
   y$DIC <- est$DIC
   y$ModelType <- est$ModelType
+
   y$Pars = with(est$Parameters, {
+    r0 <- beta / sum(est$Offsets)
+    rt <- r0 * (1 - c(est$Cases$I + est$Cases$R + est$Cases$D)[est$Cases$len] / m)
+
     list(
       "Kappa*100" = stats_fn(kappa * 100),
       Beta = stats_fn(beta),
       "Effective N (thousand)" = stats_fn(m / 1E3),
+      R0 = stats_fn(r0),
+      "R(t)" = stats_fn(rt),
       Deviance = stats_fn(deviance))
   })
 

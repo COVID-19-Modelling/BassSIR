@@ -20,9 +20,14 @@ fitted.estBassSIR <- function(est, method = c("match", "forward")) {
     hat <- (est$Cases$I[1:(nc - 2)] + est$Cases$I[3:nc] + mus) / 2
   }
 
+  r0 <- est$Parameters$beta / sum(est$Offsets)
+  a <- (est$Cases$R + est$Cases$D)[-c(1:2)]
+  rt <- r0 * (1 - (hat + a) / est$Parameters$m)
+
   y <- list(
     I_data = est$Cases$I[1:(nc - 2)],
     I_hat = hat,
+    Rt_hat = rt,
     method = method
   )
 
