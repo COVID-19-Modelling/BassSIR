@@ -41,14 +41,22 @@ as_bass_data <- function(d, id = "Place X", status = c("Current", "Cumulative"),
   }
   d <- d[order(d[i_date]), ]
 
+
+  dates <- range(d[, i_date])
+
+  ind_date <- d[, i_date] - dates[1]
+  dates <- dates[1] + 0:diff(dates)
+
+  xout <- 1:length(dates) - 1
+
   status <- match.arg(status)
   cases <- list(
     ID = id,
-    Date = d[i_date][, 1],
-    len = nrow(d),
-    I = ts(d[i_confirmed]),
-    R = ts(d[i_recovered]),
-    D = ts(d[i_dead])
+    Date = dates,
+    len = length(dates),
+    I = ts(approx(ind_date, d[, i_confirmed], xout, method = "const")$y),
+    R = ts(approx(ind_date, d[, i_recovered], xout, method = "const")$y),
+    D = ts(approx(ind_date, d[, i_dead], xout, method = "const")$y)
   )
 
   if (status == "Cumulative") {
