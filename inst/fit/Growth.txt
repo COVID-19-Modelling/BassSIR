@@ -1,13 +1,13 @@
 model {
   for (i in 1:n_t){
-    s[i] ~ dnorm(mu[i], tau)
+    di[i] ~ dnorm(mu[i], 1/sqrt(tau))
     mu[i] <- 2 * (alpha0[i] + alpha1[i] * x1[i])
 
     alpha0[i] = kappa * (m - A[i])
     alpha1[i] = (- kappa - nu) / 2
   }
 
-  tau ~ dgamma(1E-3, 1E-3)
+  tau ~ dgamma(1E-2, 1E-2)
 
   m ~ dunif(mx, mx * m_mul)
   kappa ~ dbeta(kappa_a, kappa_b)

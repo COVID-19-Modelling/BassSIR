@@ -1,0 +1,23 @@
+model {
+  for (i in 1:n_t){
+    di[i] ~ dnorm(mu[i], 1/sqrt(tau_i))
+    mu[i] <- 2 * (alpha1[i] * x1[i] + alpha2 * x2[i])
+
+    alpha1[i] <- (beta * (1 - A[i] / m) - r_die - r_rec) / 2
+
+    dd[i] ~ dnorm(r_die * x1[i], 1/sqrt(tau_r))
+
+    dr[i] ~ dnorm(r_rec * x1[i], 1/sqrt(tau_d))
+  }
+
+  alpha2 <- - beta / m
+  tau_i ~ dgamma(1E-2, 1E-2)
+  tau_r ~ dgamma(1E-2, 1E-2)
+  tau_d ~ dgamma(1E-2, 1E-2)
+
+  m ~ dunif(mx, mx * m_mul)
+  beta ~ dbeta(beta_a, beta_b)
+
+  r_rec ~ dgamma(1E-2, 1E-2)
+  r_death ~ dgamma(1E-2, 1E-2)
+}
