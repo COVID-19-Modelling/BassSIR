@@ -2,10 +2,13 @@
 % Please edit documentation in R/fitting.R
 \name{summary.estBassSIR}
 \alias{summary.estBassSIR}
+\alias{summary.estFullBassSIR}
 \alias{print.summaryEstBassSIR}
 \title{Summarise a fitted Bass SIR model}
 \usage{
 \method{summary}{estBassSIR}(est)
+
+\method{summary}{estFullBassSIR}(est)
 
 \method{print}{summaryEstBassSIR}(est)
 }

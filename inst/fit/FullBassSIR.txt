@@ -1,18 +1,19 @@
 model {
   for (i in 1:n_t){
-    di[i] ~ dnorm(mu[i], 1/sqrt(tau_i))
-    mu[i] <- 2 * (alpha0[i] + alpha1[i] * x1[i] + alpha2 * x2[i])
+    I[i + 1] <- I[i] + (beta * I[i] / m + kappa) * S[i] - r_iso * I[i]
 
-    alpha0[i] <- kappa * (m - A[i])
-    alpha1[i] <- (beta * (1 - A[i] / m) - kappa - r_death - r_rec) / 2
+    S[i] <- m - A[i] - I[i]
 
-    dd[i] ~ dnorm(r_death * x1[i], 1/sqrt(tau_r))
+    dh[i] ~ dnorm(mu[i], 1/sqrt(tau_h))
+    mu[i] <- 2 * (r_iso * I[i] - (r_death + r_rec) * x1[i] /2)
 
-    dr[i] ~ dnorm(r_rec * x1[i], 1/sqrt(tau_d))
+    dd[i] ~ dnorm(r_death * x1[i], 1/sqrt(tau_d))
+    dr[i] ~ dnorm(r_rec * x1[i], 1/sqrt(tau_r))
   }
 
-  alpha2 <- - beta / m
-  tau_i ~ dgamma(1E-2, 1E-2)
+  I[1] ~ dunif(0, m - A[1])
+
+  tau_h ~ dgamma(1E-2, 1E-2)
   tau_r ~ dgamma(1E-2, 1E-2)
   tau_d ~ dgamma(1E-2, 1E-2)
 

@@ -4,10 +4,10 @@
 \alias{stats_fn}
 \title{Calculate bootstrap credible interval}
 \usage{
-stats_fn(x)
+stats_fn(x, digits = getOption("qwraps2_frmt_digits", 2))
 }
 \arguments{
-\item{x}{}
+\item{digits}{}
 }
 \description{
 Calculate bootstrap credible interval
